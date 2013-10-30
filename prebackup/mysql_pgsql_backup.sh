@@ -24,7 +24,7 @@ MYSQLPASS=/root/.my.cnf
 
 # Remove old backups
 rm -f $PGDUMPDIR/*.schema.dump
-rm -f $MYSQLDIR/*.mysql
+rm -f $MYSQLDIR/*.mysql.bz2
 
 # Backup MySQL
 mysql --defaults-extra-file=$MYSQLPASS -B -N -e "show databases" | while read db
