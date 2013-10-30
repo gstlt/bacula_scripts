@@ -6,7 +6,8 @@
 #
 # TODO:
 # - Checking return values for mysqldump and pg_dump to catch backup errors
-# - Bzip2 backups
+# - Bzip2 backups *DONE*
+# - Add checking if bzip2 is installed/available
 
 # Configuration
 PGDUMPDIR=/opt/backups/pgsql
@@ -28,7 +29,7 @@ rm -f $MYSQLDIR/*.mysql
 # Backup MySQL
 mysql --defaults-extra-file=$MYSQLPASS -B -N -e "show databases" | while read db
 do
-   BACKUPFILE=$MYSQLDIR/$db.mysql
+   BACKUPFILE=$MYSQLDIR/$db.mysql.bz2
    echo "Backing up $db into $BACKUPFILE"
    
    # backing up information_schema and performance_schema is not required and may lead to errors
@@ -37,13 +38,13 @@ do
    # performance_schema: 
    if [ "$db" == "information_schema" ] || [ "$db" == "performance_schema"  ]; then
 
-      /usr/bin/mysqldump --defaults-extra-file=$MYSQLPASS --single-transaction --databases $db > $BACKUPFILE
+      /usr/bin/mysqldump --defaults-extra-file=$MYSQLPASS --single-transaction --databases $db | bzip2 > $BACKUPFILE
       # or comment above line and uncomment below
       # echo "Skipping $db"
 
    else
 
-      /usr/bin/mysqldump --defaults-extra-file=$MYSQLPASS --databases $db > $BACKUPFILE
+      /usr/bin/mysqldump --defaults-extra-file=$MYSQLPASS --databases $db | bzip2 > $BACKUPFILE
 
    fi
 
