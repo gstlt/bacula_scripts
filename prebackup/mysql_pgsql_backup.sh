@@ -35,7 +35,7 @@ do
    # backing up information_schema and performance_schema is not required and may lead to errors
    # see:
    # information_schema: http://bugs.mysql.com/bug.php?id=21527
-   # performance_schema: 
+   # performance_schema: http://dev.mysql.com/doc/refman/5.6/en/performance-schema-restrictions.html
    if [ "$db" == "information_schema" ] || [ "$db" == "performance_schema"  ]; then
 
       /usr/bin/mysqldump --defaults-extra-file=$MYSQLPASS --single-transaction --databases $db | bzip2 > $BACKUPFILE
